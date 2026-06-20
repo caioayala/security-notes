@@ -67,6 +67,76 @@ with requests using spoofed MAC addresses, exhausting the available IP pool and
 denying addresses to legitimate devices. This is often a precursor to a rogue
 DHCP server attack.
 
+## Network Devices
+
+### Router
+
+Routers connect networks together and are responsible for delivering data between
+them. Routing involves creating a path across networks so that data reaches its
+destination. Routers operate at Layer 3 of the OSI model and are particularly
+useful when devices are connected through multiple possible paths, selecting the
+most efficient route for each packet.
+
+### Switch
+
+A switch is a dedicated networking device that provides connections to multiple
+devices using network cables. Unlike a router, which connects networks, a switch
+connects devices within the same network. For example, if a router is connected
+to the internet and 12 computers need network access, a switch acts as an
+intermediary, allowing all 12 to connect through a single uplink to the router.
+
+## Port Forwarding
+
+Port forwarding is an essential component for exposing applications and services
+to the internet. Without it, web servers and services would only be accessible
+to devices on the same local network, functioning as an intranet. Port forwarding
+effectively converts an internal service into one accessible externally, making
+it reachable as part of an extranet. It is configured directly on the router.
+
+Security note: misconfigured port forwarding rules are a common attack vector.
+Exposing unnecessary ports to the internet expands the attack surface and can
+allow direct access to internal services.
+
+## Firewalls
+
+A firewall is a network component, implemented in software or hardware, responsible
+for determining which packet traffic is permitted to enter or leave a network. It
+acts as a security barrier, inspecting incoming and outgoing packets based on
+defined rules. The network administrator configures these rules to allow or deny
+traffic based on criteria such as source IP, destination IP, port and protocol.
+
+### Stateful Firewall
+
+Inspects the entire connection rather than individual packets. If a suspicious
+or malicious packet is detected, the firewall can block the device entirely,
+treating the whole session as a threat.
+
+### Stateless Firewall
+
+Inspects each packet individually against a set of static rules. A malicious
+packet is blocked, but the device sending it is not necessarily flagged or
+blocked for subsequent packets. Stateless firewalls are faster but less
+intelligent than stateful ones.
+
+Security note: stateless firewalls are easier to evade because each packet is
+evaluated in isolation, with no memory of previous traffic from the same source.
+
+## VPN (Virtual Private Network)
+
+A VPN is a technology that allows devices on separate networks to communicate
+securely by creating an encrypted tunnel between them. Devices connected through
+this tunnel form their own private network regardless of physical location.
+
+| Benefit             | Description |
+|---------------------|-------------|
+| Geographic connection | Organisations with multiple offices can share internal resources such as servers across locations securely |
+| Privacy             | Traffic is encrypted end to end, making it unreadable to anyone intercepting it in transit, including on public Wi-Fi networks |
+| Anonymity           | Traffic is routed through the VPN server, masking the origin from ISPs and intermediaries. The level of anonymity depends on the VPN provider's logging policy |
+
+Security note: VPNs are commonly used in penetration testing to route traffic
+through specific network segments or to anonymise activity during authorised
+engagements.
+
 ## OSI Model
 
 The OSI (Open Systems Interconnection) model is a conceptual framework that
@@ -86,14 +156,6 @@ communication into 7 layers, each with a specific responsibility.
 A practical way to memorise the layers from 7 to 1: "All People Seem To
 Need Data Processing".
 
-## Network Interface Card (NIC)
-
-Every networked device contains a Network Interface Card, a hardware component
-responsible for connecting the device to a network. Each NIC is assigned a
-unique MAC (Media Access Control) address at the factory, used for physical
-identification at Layer 2. Although MAC addresses are intended to be permanent,
-they can be spoofed at the software level.
-
 ## TCP/IP Model
 
 While the OSI model is the theoretical standard, the TCP/IP model is what
@@ -106,8 +168,13 @@ networks actually implement in practice. It condenses the 7 OSI layers into 4:
 | Internet      | 3                     |
 | Network Access| 1, 2                  |
 
-Understanding both models is important because documentation and tools
-reference either one depending on context.
+## Network Interface Card (NIC)
+
+Every networked device contains a Network Interface Card, a hardware component
+responsible for connecting the device to a network. Each NIC is assigned a
+unique MAC (Media Access Control) address at the factory, used for physical
+identification at Layer 2. Although MAC addresses are intended to be permanent,
+they can be spoofed at the software level.
 
 ## Security Notes
 
@@ -115,5 +182,8 @@ reference either one depending on context.
 - ARP Spoofing enables man-in-the-middle attacks by poisoning ARP caches
 - DHCP Starvation exhausts the IP pool, enabling rogue DHCP server insertion
 - Subnetting limits broadcast domains, reducing the blast radius of Layer 2 attacks
-- Unencrypted protocols at Layer 7 (such as HTTP and FTP) expose data to
+- Unencrypted protocols at Layer 7 such as HTTP and FTP expose data to
   interception at any layer below
+- Misconfigured port forwarding rules expose internal services to the internet
+- Stateless firewalls are more susceptible to evasion than stateful ones
+- VPN anonymity is only as strong as the provider's logging and data retention policy
